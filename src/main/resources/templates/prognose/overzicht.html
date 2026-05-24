@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="nl">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Mijn Prognoses – FIFA WC 2026</title>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;700;900&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+<main>
+    <div class="container">
+        <div class="page-header">
+            <p class="page-header__eyebrow">Mijn Prognoses</p>
+            <h1 class="page-header__title">Mijn Prognoses</h1>
+            <p class="page-header__subtitle">Tot 1 uur voor de wedstrijd aanpasbaar</p>
+        </div>
+
+        <div th:if="${#lists.isEmpty(matches)}" class="empty-state">
+            <p class="empty-state__title">Nog geen wedstrijden gepland</p>
+        </div>
+
+        <div class="prognose-list" th:unless="${#lists.isEmpty(matches)}">
+            <div th:each="match : ${matches}" class="prognose-row">
+
+                <!-- Match info -->
+                <div>
+                    <div class="prognose-row__match"
+                         th:text="${#temporals.format(match.matchDateTime, 'dd/MM/yyyy HH:mm')}">
+                    </div>
+                    <div class="prognose-row__teams">
+                        <span th:text="${match.countryA}">BEL</span>
+                        <span style="color:var(--red); margin:0 8px;">vs</span>
+                        <span th:text="${match.countryB}">FRA</span>
+                    </div>
+                </div>
+
+                <!-- Huidige prognose -->
+                <div style="text-align:center;">
+                    <div th:if="${prognoseMap[match.id] != null}" class="prognose-row__score-inputs">
+            <span class="prognose-row__score-input prognose-row__score-input--filled"
+                  th:text="${prognoseMap[match.id].predictedScoreA}">0</span>
+                        <span class="prognose-row__sep">–</span>
+                        <span class="prognose-row__score-input prognose-row__score-input--filled"
+                              th:text="${prognoseMap[match.id].predictedScoreB}">0</span>
+                    </div>
+                    <div th:unless="${prognoseMap[match.id] != null}"
+                         style="font-size:0.75rem; color:var(--text-muted); font-weight:700;">
+                        Geen voorspelling
+                    </div>
+                    <div th:if="${match.played and prognoseMap[match.id] != null}"
+                         class="prognose-row__points prognose-row__points--earned">
+                        +<span th:text="${prognoseMap[match.id].points}">0</span> pts
+                    </div>
+                </div>
+
+                <!-- Actie knop -->
+                <div>
+                    <a th:href="@{/match/{id}(id=${match.id})}"
+                       th:if="${not match.played}"
+                       class="btn btn--primary btn--sm"
+                       th:text="${prognoseMap[match.id] != null} ? 'Wijzigen' : 'Voorspellen'">
+                        Voorspellen
+                    </a>
+                    <span th:if="${match.played}"
+                          style="font-size:0.7rem; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.05em;">
+            Gespeeld
+          </span>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</main>
+<footer class="site-footer">© 2026 FIFA Team Prognose</footer>
+</body>
+</html>

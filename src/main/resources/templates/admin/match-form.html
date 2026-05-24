@@ -1,0 +1,101 @@
+<!-- ADMIN MATCH FORM -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="nl">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title th:text="${editMode} ? 'Bewerken' : 'Toevoegen' + ' – Admin'">Wedstrijd</title>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;700;900&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<main>
+    <div class="container">
+        <a th:href="@{/admin/matches}" class="back-link">← Wedstrijdenbeheer</a>
+
+        <div style="max-width: 680px;">
+            <div class="page-header" style="padding-top:24px;">
+                <p class="page-header__eyebrow">Admin</p>
+                <h1 class="page-header__title"
+                    th:text="${editMode} ? 'Wedstrijd bewerken' : 'Nieuwe wedstrijd'">Wedstrijd</h1>
+            </div>
+
+            <div th:if="${errorMessage}" class="alert alert--danger" th:text="${errorMessage}"></div>
+
+            <form th:action="${editMode} ? @{/admin/matches/{id}/edit(id=${matchId})} : @{/admin/matches/new}"
+                  method="post" th:object="${matchRequest}">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label" th:text="#{match.countryA.label}">Land A</label>
+                        <input type="text" th:field="*{countryA}" class="form-control"
+                               th:placeholder="#{match.countryA.placeholder}"/>
+                        <span class="field-error" th:errors="*{countryA}"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" th:text="#{match.countryB.label}">Land B</label>
+                        <input type="text" th:field="*{countryB}" class="form-control"
+                               th:placeholder="#{match.countryB.placeholder}"/>
+                        <span class="field-error" th:errors="*{countryB}"></span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" th:text="#{match.datetime.label}">Datum & Tijdstip</label>
+                    <input type="datetime-local" th:field="*{matchDateTime}" class="form-control"/>
+                    <p class="form-hint" th:text="#{match.wkperiod.hint}">11 juni – 19 juli 2026</p>
+                    <span class="field-error" th:errors="*{matchDateTime}"></span>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label" th:text="#{match.city.label}">Stad</label>
+                        <input type="text" th:field="*{city}" class="form-control"
+                               th:placeholder="#{match.city.placeholder}"/>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" th:text="#{match.stadium.label}">Stadion</label>
+                        <input type="text" th:field="*{stadium}" class="form-control"
+                               th:placeholder="#{match.stadium.placeholder}"/>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label" th:text="#{match.stadiumcode.label}">Stadiumcode</label>
+                        <input type="text" th:field="*{stadiumCode}" class="form-control"
+                               th:placeholder="#{match.stadiumcode.placeholder}" maxlength="4"/>
+                        <span class="field-error" th:errors="*{stadiumCode}"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" th:text="#{match.checksum.label}">Checksum</label>
+                        <input type="number" th:field="*{checksum}" class="form-control"
+                               th:placeholder="#{match.checksum.placeholder}"/>
+                        <p class="form-hint" th:text="#{match.checksum.hint}">code % 97</p>
+                        <span class="field-error"
+                              th:if="${#fields.hasGlobalErrors()}"
+                              th:errors="*{global}"></span>
+                    </div>
+                </div>
+
+                <hr class="divider"/>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn--red"
+                            th:text="${editMode} ? #{match.edit.submit} : #{match.create.submit}">
+                        Opslaan
+                    </button>
+                    <a th:href="@{/admin/matches}" class="btn btn--outline"
+                       th:text="#{match.cancel}">Annuleren</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</main>
+
+<footer class="site-footer">© 2026 FIFA Team Prognose</footer>
+</body>
+</html>

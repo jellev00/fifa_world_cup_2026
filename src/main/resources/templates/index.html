@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title th:text="#{home.title}">FIFA World Cup 2026</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;700;900&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<main>
+    <div class="container">
+
+        <!-- Hero -->
+        <section class="hero">
+            <p class="hero__eyebrow">
+                <span style="color:var(--red);">●</span> FIFA World Cup · 2026
+            </p>
+            <h1 class="hero__title">
+                Predict.<br>
+                <span class="red">Compete.</span> Conquer
+            </h1>
+            <p class="hero__subtitle" th:text="#{home.subtitle}">
+                Voorspel scores en verzamel punten met je team
+            </p>
+        </section>
+
+        <div th:if="${successMessage}" class="alert alert--success" th:text="${successMessage}"></div>
+        <div th:if="${errorMessage}" class="alert alert--danger" th:text="${errorMessage}"></div>
+
+        <div class="section-title">Wedstrijden</div>
+
+        <div class="matches-grid" th:if="${not #lists.isEmpty(matches)}">
+            <div th:each="match : ${matches}" class="match-card-v2">
+
+                <!-- Header -->
+                <div class="match-card-v2__header">
+          <span class="match-card-v2__stadium"
+                th:text="${match.stadium != null ? match.stadium.toUpperCase() : 'TBD'}">
+            METLIFE STADIUM
+          </span>
+                    <span class="match-card-v2__time">
+            <span th:text="${#temporals.format(match.matchDateTime, 'dd MMM')}">14 jun</span>
+            ·
+            <span th:text="${#temporals.format(match.matchDateTime, 'HH:mm')}">13:00</span>
+        </span>
+                </div>
+
+                <!-- Teams met vlaggen -->
+                <div class="match-card-v2__teams">
+                    <!-- Land A -->
+                    <div class="match-card-v2__team">
+                        <img th:src="${@flagHelper.getFlagUrl(match.countryA)}"
+                             th:alt="${match.countryA}"
+                             class="match-card-v2__flag-img"
+                             onerror="this.style.display='none'"/>
+                        <span class="match-card-v2__code"
+                              th:text="${#strings.length(match.countryA) >= 3
+                    ? #strings.substring(match.countryA,0,3).toUpperCase()
+                    : match.countryA.toUpperCase()}">BEL</span>
+                    </div>
+
+                    <!-- Scores -->
+                    <div class="match-card-v2__scores">
+            <span class="match-card-v2__score"
+                  th:text="${match.played ? match.officialScoreA : '–'}">–</span>
+                        <div class="match-card-v2__vs-badge">vs</div>
+                        <span class="match-card-v2__score"
+                              th:text="${match.played ? match.officialScoreB : '–'}">–</span>
+                    </div>
+
+                    <!-- Land B -->
+                    <div class="match-card-v2__team match-card-v2__team--right">
+            <span class="match-card-v2__code"
+                  th:text="${#strings.length(match.countryB) >= 3
+                    ? #strings.substring(match.countryB,0,3).toUpperCase()
+                    : match.countryB.toUpperCase()}">FRA</span>
+                        <img th:src="${@flagHelper.getFlagUrl(match.countryB)}"
+                             th:alt="${match.countryB}"
+                             class="match-card-v2__flag-img"
+                             onerror="this.style.display='none'"/>
+                    </div>
+                </div>
+
+                <!-- Card footer -->
+                <div class="match-card-v2__footer">
+                    <a th:href="@{/match/{id}(id=${match.id})}" class="match-card__link">
+                        Details →
+                    </a>
+                    <span sec:authorize="hasRole('ADMIN')">
+            <a th:href="@{/admin/matches/{id}/edit(id=${match.id})}"
+               class="match-card__link" style="margin-left:12px;">
+              Bewerken
+            </a>
+          </span>
+                </div>
+
+            </div>
+        </div>
+
+        <div th:if="${#lists.isEmpty(matches)}" class="empty-state">
+            <p class="empty-state__title">Nog geen wedstrijden gepland</p>
+        </div>
+
+    </div>
+</main>
+
+<footer class="site-footer">© 2026 FIFA Team Prognose</footer>
+</body>
+</html>

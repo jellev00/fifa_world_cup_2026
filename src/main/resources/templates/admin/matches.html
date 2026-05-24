@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="nl">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Wedstrijden beheren – Admin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;700;900&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<main>
+    <div class="container">
+        <div class="page-header">
+            <p class="page-header__eyebrow">Admin</p>
+            <h1 class="page-header__title" th:text="#{admin.matches.title}">Wedstrijden beheren</h1>
+            <p class="page-header__subtitle">Voeg wedstrijden toe of voer uitslagen in</p>
+            <div class="page-header__actions">
+                <a th:href="@{/admin/matches/new}" class="btn btn--red" th:text="#{admin.matches.add}">
+                    + Wedstrijd toevoegen
+                </a>
+            </div>
+        </div>
+
+        <div th:if="${successMessage}" class="alert alert--success" th:text="${successMessage}"></div>
+
+        <!-- Two column: match list + quick-action sidebar -->
+        <div class="admin-layout">
+
+            <!-- Match list -->
+            <div class="admin-match-list">
+                <div style="font-size:0.65rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:var(--text-muted); padding:10px 0; border-bottom: 2px solid var(--black); display:grid; grid-template-columns:1fr auto auto; gap:16px;">
+                    <div>Wedstrijd</div>
+                    <div>Uitslag</div>
+                    <div>Acties</div>
+                </div>
+
+                <div th:if="${#lists.isEmpty(matches)}" class="empty-state">
+                    <p class="empty-state__title">Nog geen wedstrijden</p>
+                    <p class="empty-state__text">Voeg de eerste wedstrijd toe via de knop hierboven.</p>
+                </div>
+
+                <div th:each="match : ${matches}" class="admin-match-row">
+                    <div>
+                        <div class="admin-match-row__teams">
+                            <span th:text="${match.countryA}">POL</span>
+                            <span style="color:var(--red); margin:0 6px;">vs</span>
+                            <span th:text="${match.countryB}">COL</span>
+                        </div>
+                        <div class="admin-match-row__meta">
+                            <span th:text="${#temporals.format(match.matchDateTime, 'dd/MM/yyyy HH:mm')}"></span>
+                            <span th:if="${match.stadium != null}">
+                · <span th:text="${match.stadium}"></span>
+              </span>
+                        </div>
+                    </div>
+
+                    <div>
+            <span th:if="${match.played}" class="admin-match-row__score">
+              <span th:text="${match.officialScoreA}">2</span>
+              –
+              <span th:text="${match.officialScoreB}">1</span>
+            </span>
+                        <span th:unless="${match.played}" class="admin-match-row__score"
+                              style="color:var(--text-muted); font-size:0.7rem;">–</span>
+                    </div>
+
+                    <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                        <a th:href="@{/admin/matches/{id}/edit(id=${match.id})}"
+                           class="btn btn--outline btn--sm">Bewerken</a>
+                        <a th:href="@{/admin/matches/{id}/uitslag(id=${match.id})}"
+                           class="btn btn--red btn--sm">Uitslag</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sidebar: snel wedstrijd toevoegen -->
+            <div>
+                <div class="admin-form-panel">
+                    <div class="admin-form-panel__title">Wedstrijd toevoegen</div>
+                    <p style="font-size:0.78rem; color:var(--text-muted); margin-bottom:16px;">
+                        Gebruik het formulier om een nieuwe wedstrijd toe te voegen aan het schema.
+                    </p>
+                    <a th:href="@{/admin/matches/new}" class="btn btn--red btn--full">
+                        + Nieuwe wedstrijd
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</main>
+
+<footer class="site-footer">© 2026 FIFA Team Prognose</footer>
+</body>
+</html>

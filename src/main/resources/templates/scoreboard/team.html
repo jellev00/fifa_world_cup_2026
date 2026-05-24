@@ -1,0 +1,43 @@
+<!-- TEAM SCOREBOARD -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="nl">
+<head>
+    <meta charset="UTF-8"/>
+    <title th:text="${team.name} + ' – Scoreboard'">Scoreboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;700;900&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+<main>
+    <div class="container">
+        <div class="page-header">
+            <p class="page-header__eyebrow" th:text="#{scoreboard.title}">Scoreboard</p>
+            <h1 class="page-header__title" th:text="${team.name}">Team naam</h1>
+            <p class="page-header__subtitle" th:text="#{scoreboard.team.subtitle}">Enkel zichtbaar voor teamleden.</p>
+            <div class="page-header__actions">
+                <a th:href="@{/team/{id}(id=${team.id})}" class="btn btn--outline" th:text="#{scoreboard.back.team}">← Terug naar team</a>
+            </div>
+        </div>
+
+        <div class="scoreboard-row" style="font-size:0.65rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:var(--text-muted); padding:10px 0; border-bottom: 2px solid var(--black);">
+            <div th:text="#{scoreboard.rank}">#</div>
+            <div th:text="#{scoreboard.member}">Speler</div>
+            <div style="text-align:right;" th:text="#{scoreboard.score}">Score</div>
+        </div>
+
+        <div th:each="entry : ${entries}" class="scoreboard-row"
+             th:classappend="${entry.userId == currentUserId} ? ' scoreboard-row--highlight' : ''">
+            <div class="scoreboard-row__rank" th:text="${entry.rank}">1</div>
+            <div class="scoreboard-row__name">
+                <span th:text="${entry.username}">Username</span>
+                <span th:if="${entry.userId == currentUserId}" class="you-badge">jij</span>
+            </div>
+            <div class="scoreboard-row__score" th:text="${entry.totalPoints} + ' pts'">0 pts</div>
+        </div>
+
+    </div>
+</main>
+<footer class="site-footer">© 2026 FIFA Team Prognose</footer>
+</body>
+</html>

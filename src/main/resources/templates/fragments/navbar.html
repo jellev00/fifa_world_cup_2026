@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<body>
+<nav th:fragment="navbar" class="navbar">
+    <div class="navbar__inner">
+
+        <a th:href="@{/}" class="navbar__logo">
+            <div class="navbar__badge">26</div>
+            <div class="navbar__brand">
+                <span class="navbar__brand-top">FIFA 2026</span>
+                <span class="navbar__brand-sub">Team Prognose</span>
+            </div>
+        </a>
+
+        <ul class="navbar__links">
+            <li><a th:href="@{/}">Home</a></li>
+            <li><a th:href="@{/top10}">Top 10</a></li>
+            <li sec:authorize="isAuthenticated()"><a th:href="@{/team/mijn-teams}">Mijn Team</a></li>
+            <li sec:authorize="isAuthenticated()"><a th:href="@{/prognose/overzicht}">Mijn Prognoses</a></li>
+            <li sec:authorize="hasRole('ADMIN')"><a th:href="@{/admin/matches}">Beheer</a></li>
+        </ul>
+
+        <div class="navbar__actions">
+      <span sec:authorize="isAnonymous()">
+        <a th:href="@{/login}" class="btn-nav-login">Login</a>
+        <a th:href="@{/register}" class="btn-nav-register">Registreren</a>
+      </span>
+            <span sec:authorize="isAuthenticated()">
+        <form th:action="@{/logout}" method="post" style="display:inline;">
+          <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+          <button type="submit" class="btn-nav-logout">Uitloggen</button>
+        </form>
+      </span>
+        </div>
+
+    </div>
+</nav>
+</body>
+</html>
