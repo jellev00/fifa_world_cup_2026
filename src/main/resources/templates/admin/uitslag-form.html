@@ -11,11 +11,11 @@
 <div th:replace="~{fragments/navbar :: navbar}"></div>
 <main>
     <div class="container">
-        <a th:href="@{/admin/matches}" class="back-link">← Wedstrijdenbeheer</a>
+        <a th:href="@{/admin/matches}" class="back-link" th:text="#{nav.back.to.match.management}">← Wedstrijdenbeheer</a>
 
         <div style="max-width: 480px;">
             <div class="page-header" style="padding-top:24px;">
-                <p class="page-header__eyebrow">Admin · Uitslag</p>
+                <p class="page-header__eyebrow" th:text="#{uitslag.paragraph}">Admin · Uitslag</p>
                 <h1 class="page-header__title" th:text="#{uitslag.title}">Uitslag ingeven</h1>
             </div>
 

@@ -11,19 +11,19 @@
 <main>
     <div class="container">
         <div class="page-header">
-            <p class="page-header__eyebrow">Mijn Team</p>
-            <h1 class="page-header__title">Mijn Teams</h1>
-            <p class="page-header__subtitle">Jouw fantasy-teams en scores</p>
+            <p class="page-header__eyebrow" th:text="#{team.title}">Mijn Team</p>
+            <h1 class="page-header__title" th:text="#{team.title}">Mijn Teams</h1>
+            <p class="page-header__subtitle" th:text="#{team.paragraph}">Jouw fantasy-teams en scores</p>
             <div class="page-header__actions">
-                <a th:href="@{/team/create}" class="btn btn--red">+ Team aanmaken</a>
-                <a th:href="@{/team/join}" class="btn btn--outline">Lid worden</a>
+                <a th:href="@{/team/create}" class="btn btn--red" th:text="#{team.create.submit}">+ Team aanmaken</a>
+                <a th:href="@{/team/join}" class="btn btn--outline" th:text="#{team.join.submit}">Lid worden</a>
             </div>
         </div>
 
         <!-- Geen teams -->
         <div th:if="${#lists.isEmpty(teams)}" class="empty-state">
-            <p class="empty-state__title">Je bent nog geen lid van een team</p>
-            <p class="empty-state__text">Maak een team aan of sluit je aan via een invitecode.</p>
+            <p class="empty-state__title" th:text="#{team.no.member}">Je bent nog geen lid van een team</p>
+            <p class="empty-state__text" th:text="#{team.create.team}">Maak een team aan of sluit je aan via een invitecode.</p>
         </div>
 
         <!-- Teams grid -->
@@ -31,25 +31,31 @@
             <div th:each="team : ${teams}" class="team-card">
                 <div class="team-card__header">
                     <div class="team-card__name" th:text="${team.name}">Teamnaam</div>
-                    <div class="team-card__score-label">Totaalscore</div>
-                    <div class="team-card__score-value">0</div>
+                    <div class="team-card__score-label" th:text="#{team.score}">Totaalscore</div>
+                    <div class="team-card__score-value"
+                         th:text="${teamScores[team.id] != null ? teamScores[team.id] : 0}">0</div>
                 </div>
 
                 <ul class="team-card__members">
                     <li th:each="member : ${team.members}" class="team-card__member">
-            <span class="team-card__member-name">
-              <span th:text="${member.username}"></span>
-              <span th:if="${member.id == team.owner.id}" class="team-card__member-owner">eigenaar</span>
-            </span>
-                        <span class="team-card__member-pts">0 pts</span>
+                        <span class="team-card__member-name">
+                            <span th:text="${member.username}"></span>
+                            <span th:if="${member.id == team.owner.id}"
+                                  class="team-card__member-owner"
+                                  th:text="#{team.owner}">eigenaar</span>
+                        </span>
+                                        <span class="team-card__member-pts"
+                                              th:text="${(userScores[member.id] != null ? userScores[member.id] : 0)} + ' pts'">
+                            0 pts
+                        </span>
                     </li>
                 </ul>
 
                 <div style="display:flex; gap:10px; margin-top:16px;">
                     <a th:href="@{/team/{id}(id=${team.id})}"
-                       class="btn btn--primary btn--sm">Teampagina</a>
+                       class="btn btn--primary btn--sm" th:text="#{nav.create.team}">Teampagina</a>
                     <a th:href="@{/team/{id}/scoreboard(id=${team.id})}"
-                       class="btn btn--outline btn--sm">Scoreboard</a>
+                       class="btn btn--outline btn--sm" th:text="#{nav.Scoreboard}">Scoreboard</a>
                 </div>
             </div>
         </div>

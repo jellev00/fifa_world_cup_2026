@@ -13,7 +13,7 @@
 
 <main>
     <div class="container">
-        <a th:href="@{/}" class="back-link">← Terug naar overzicht</a>
+        <a th:href="@{/}" class="back-link" th:text="#{nav.back.to.overview}">← Terug naar overzicht</a>
 
         <div class="match-detail">
 
@@ -28,14 +28,14 @@
                     <span>📅 <span th:text="${#temporals.format(match.matchDateTime, 'dd/MM/yyyy HH:mm')}"></span></span>
                     <span>📍 <span th:text="${(match.city != null ? match.city : '') + (match.stadium != null ? ', ' + match.stadium : '')}"></span></span>
                     <span th:if="${stadiumCapacity != null}" class="capacity-badge">
-            🏟️ <span th:text="${#numbers.formatInteger(stadiumCapacity, 1, 'COMMA')} + ' plaatsen'"></span>
+            🏟️ <span th:text="${#numbers.formatInteger(stadiumCapacity, 1, 'COMMA')} + ' ' + #{match.places}"></span>
           </span>
                 </div>
             </div>
 
             <!-- Officiële uitslag -->
             <div th:if="${match.played}" class="match-detail__score-display">
-                <div class="match-detail__score-display-label">Officiële uitslag</div>
+                <div class="match-detail__score-display-label" th:text="#{match.official}">Officiële uitslag</div>
                 <div class="match-detail__score-display-number">
                     <span th:text="${match.officialScoreA}">2</span>
                     <span class="sep">–</span>
@@ -44,7 +44,7 @@
             </div>
 
             <div th:unless="${match.played}" style="text-align:center; padding: 24px; background: var(--light-grey); margin-bottom: 32px;">
-        <span style="font-size:0.78rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color: var(--text-muted);">
+        <span style="font-size:0.78rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color: var(--text-muted);" th:text="#{match.still.to.play}">
           ⏳ Nog te spelen
         </span>
             </div>
@@ -52,9 +52,9 @@
             <!-- Admin acties -->
             <div sec:authorize="hasRole('ADMIN')" style="display:flex; gap:12px; margin-bottom:32px;">
                 <a th:href="@{/admin/matches/{id}/edit(id=${match.id})}"
-                   class="btn btn--outline btn--sm">Wedstrijd bewerken</a>
+                   class="btn btn--outline btn--sm" th:text="#{match.update}">Wedstrijd bewerken</a>
                 <a th:href="@{/admin/matches/{id}/uitslag(id=${match.id})}"
-                   class="btn btn--red btn--sm">Uitslag ingeven</a>
+                   class="btn btn--red btn--sm" th:text="#{match.enter.result}">Uitslag ingeven</a>
             </div>
 
             <!-- Prognose sectie -->
@@ -64,7 +64,7 @@
                 <!-- Bestaande prognose -->
                 <div th:if="${prognose != null}" class="existing-prognose-display">
                     <div>
-                        <div class="existing-prognose-display__label">Jouw voorspelling</div>
+                        <div class="existing-prognose-display__label" th:text="#{prognose.title}">Jouw voorspelling</div>
                         <div class="existing-prognose-display__score">
                             <span th:text="${prognose.predictedScoreA}">1</span>
                             <span style="color:var(--red); margin:0 8px;">–</span>

@@ -12,7 +12,7 @@
 <main class="auth-page">
     <div class="auth-card">
         <h1 class="auth-card__title" th:text="#{team.create.title}">Team aanmaken</h1>
-        <p class="auth-card__subtitle">Kies een unieke naam voor jouw fantasy-team</p>
+        <p class="auth-card__subtitle" th:text="#{team.create.paragraph}">Kies een unieke naam voor jouw fantasy-team</p>
 
         <div th:if="${errorMessage}" class="alert alert--danger" th:text="${errorMessage}"></div>
 

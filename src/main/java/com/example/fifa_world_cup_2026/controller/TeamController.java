@@ -5,6 +5,7 @@ import com.example.fifa_world_cup_2026.model.Team;
 import com.example.fifa_world_cup_2026.model.User;
 import com.example.fifa_world_cup_2026.repository.TeamRepository;
 import com.example.fifa_world_cup_2026.repository.UserRepository;
+import com.example.fifa_world_cup_2026.service.ScoreService;
 import com.example.fifa_world_cup_2026.service.TeamService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +16,9 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/team")
@@ -25,6 +28,7 @@ public class TeamController {
     private final TeamService teamService;
     private final UserRepository userRepository;
     private final TeamRepository teamRepository;
+    private final ScoreService scoreService;
 
     private User getCurrentUser(UserDetails userDetails) {
         return userRepository.findByUsername(userDetails.getUsername())
@@ -83,6 +87,7 @@ public class TeamController {
             @PathVariable Long id,
             @AuthenticationPrincipal UserDetails userDetails,
             Model model) {
+
         User user = getCurrentUser(userDetails);
         Team team = teamService.getTeamById(id);
 
@@ -91,10 +96,20 @@ public class TeamController {
 
         if (!isMember) {
             model.addAttribute("errorMessage", "Je bent geen lid van dit team.");
-            return "error/error";
+            return "error";
         }
 
+        // Score per lid berekenen
+        Map<Long, Integer> userScores = new HashMap<>();
+        for (User member : team.getMembers()) {
+            userScores.put(member.getId(), scoreService.getTotalPointsForUser(member));
+        }
+
+        int totalTeamScore = scoreService.getTotalPointsForTeam(team);
+
         model.addAttribute("team", team);
+        model.addAttribute("userScores", userScores);
+        model.addAttribute("totalTeamScore", totalTeamScore);
         model.addAttribute("isOwner", team.getOwner().getId().equals(user.getId()));
         model.addAttribute("currentUser", user);
         return "team/detail";
@@ -121,16 +136,30 @@ public class TeamController {
             @AuthenticationPrincipal UserDetails userDetails,
             Model model) {
 
-        User user = userRepository.findByUsername(userDetails.getUsername())
-                .orElseThrow();
+        User user = getCurrentUser(userDetails);
 
-        // Haal alle teams op waar de user lid van is
         List<Team> teams = teamRepository.findAll().stream()
                 .filter(t -> t.getMembers().stream()
                         .anyMatch(m -> m.getId().equals(user.getId())))
                 .toList();
 
+        // Score per team berekenen
+        Map<Long, Integer> teamScores = new HashMap<>();
+        for (Team team : teams) {
+            teamScores.put(team.getId(), scoreService.getTotalPointsForTeam(team));
+        }
+
+        // Score per user berekenen (voor alle leden van alle teams)
+        Map<Long, Integer> userScores = new HashMap<>();
+        for (Team team : teams) {
+            for (User member : team.getMembers()) {
+                userScores.put(member.getId(), scoreService.getTotalPointsForUser(member));
+            }
+        }
+
         model.addAttribute("teams", teams);
+        model.addAttribute("teamScores", teamScores);
+        model.addAttribute("userScores", userScores);
         model.addAttribute("currentUser", user);
         return "team/mijn-teams";
     }

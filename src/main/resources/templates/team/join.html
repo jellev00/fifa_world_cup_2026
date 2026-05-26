@@ -12,7 +12,7 @@
 <main class="auth-page">
     <div class="auth-card">
         <h1 class="auth-card__title" th:text="#{team.join.title}">Lid worden</h1>
-        <p class="auth-card__subtitle">Voer de invitecode in die je van je vrienden hebt gekregen</p>
+        <p class="auth-card__subtitle" th:text="#{team.join.paragraph}">Voer de invitecode in die je van je vrienden hebt gekregen</p>
 
         <div th:if="${errorMessage}" class="alert alert--danger" th:text="${errorMessage}"></div>
 
@@ -30,7 +30,7 @@
         </form>
 
         <p class="auth-card__footer">
-            <a th:href="@{/team/create}">Eigen team aanmaken</a>
+            <a th:href="@{/team/create}" th:text="#{team.create.own}">Eigen team aanmaken</a>
         </p>
     </div>
 </main>

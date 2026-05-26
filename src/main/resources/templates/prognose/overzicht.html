@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="nl">
 <head>
     <meta charset="UTF-8"/>
-    <title>Mijn Prognoses – FIFA WC 2026</title>
+    <title>[[#{prognose.titles}]] – FIFA WC 2026</title>
     <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;700;900&display=swap" rel="stylesheet"/>
     <link rel="stylesheet" th:href="@{/css/style.css}"/>
 </head>
@@ -11,13 +11,13 @@
 <main>
     <div class="container">
         <div class="page-header">
-            <p class="page-header__eyebrow">Mijn Prognoses</p>
-            <h1 class="page-header__title">Mijn Prognoses</h1>
-            <p class="page-header__subtitle">Tot 1 uur voor de wedstrijd aanpasbaar</p>
+            <p class="page-header__eyebrow" th:text="#{prognose.titles}">Mijn Prognoses</p>
+            <h1 class="page-header__title" th:text="#{prognose.titles}">Mijn Prognoses</h1>
+            <p class="page-header__subtitle" th:text="#{prognose.titles.paragraph}">Tot 1 uur voor de wedstrijd aanpasbaar</p>
         </div>
 
         <div th:if="${#lists.isEmpty(matches)}" class="empty-state">
-            <p class="empty-state__title">Nog geen wedstrijden gepland</p>
+            <p class="empty-state__title" th:text="#{prognose.no.matches}">Nog geen wedstrijden gepland</p>
         </div>
 
         <div class="prognose-list" th:unless="${#lists.isEmpty(matches)}">
@@ -45,7 +45,7 @@
                               th:text="${prognoseMap[match.id].predictedScoreB}">0</span>
                     </div>
                     <div th:unless="${prognoseMap[match.id] != null}"
-                         style="font-size:0.75rem; color:var(--text-muted); font-weight:700;">
+                         style="font-size:0.75rem; color:var(--text-muted); font-weight:700;" th:text="#{prognose.no}">
                         Geen voorspelling
                     </div>
                     <div th:if="${match.played and prognoseMap[match.id] != null}"
@@ -59,11 +59,13 @@
                     <a th:href="@{/match/{id}(id=${match.id})}"
                        th:if="${not match.played}"
                        class="btn btn--primary btn--sm"
-                       th:text="${prognoseMap[match.id] != null} ? 'Wijzigen' : 'Voorspellen'">
+                       th:text="${prognoseMap[match.id] != null}
+                        ? #{prognose.action.edit}
+                        : #{prognose.action.predict}">
                         Voorspellen
                     </a>
                     <span th:if="${match.played}"
-                          style="font-size:0.7rem; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.05em;">
+                          style="font-size:0.7rem; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.05em;" th:text="#{prognose.status.played}">
             Gespeeld
           </span>
                 </div>

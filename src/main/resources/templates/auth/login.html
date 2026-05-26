@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Inloggen – FIFA WC 2026</title>
+    <title>[[#{login.title}]] – FIFA WC 2026</title>
     <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;700;900&display=swap" rel="stylesheet"/>
     <link rel="stylesheet" th:href="@{/css/style.css}"/>
 </head>
@@ -12,7 +12,7 @@
 <div th:replace="~{fragments/navbar :: navbar}"></div>
 <main class="auth-page">
     <div class="auth-card">
-        <h1 class="auth-card__title">Welkom<br>Terug</h1>
+        <h1 class="auth-card__title">[[#{login.title}]]</h1>
         <p class="auth-card__subtitle" th:text="#{login.title}">Log in op je account</p>
 
         <div th:if="${param.error}" class="alert alert--danger" th:text="#{login.error}"></div>

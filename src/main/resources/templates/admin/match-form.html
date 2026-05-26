@@ -13,11 +13,11 @@
 
 <main>
     <div class="container">
-        <a th:href="@{/admin/matches}" class="back-link">← Wedstrijdenbeheer</a>
+        <a th:href="@{/admin/matches}" class="back-link" th:text="#{nav.back.to.match.management}">← Wedstrijdenbeheer</a>
 
         <div style="max-width: 680px;">
             <div class="page-header" style="padding-top:24px;">
-                <p class="page-header__eyebrow">Admin</p>
+                <p class="page-header__eyebrow" th:text="#{admin.title}">Admin</p>
                 <h1 class="page-header__title"
                     th:text="${editMode} ? 'Wedstrijd bewerken' : 'Nieuwe wedstrijd'">Wedstrijd</h1>
             </div>
