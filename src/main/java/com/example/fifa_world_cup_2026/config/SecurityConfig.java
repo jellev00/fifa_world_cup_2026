@@ -43,16 +43,16 @@ public class SecurityConfig {
                 .authenticationProvider(authenticationProvider())
                 .authorizeHttpRequests(auth -> auth
                         // Publiek toegankelijk
-                        .requestMatchers("/", "/login", "/register", "/generate-hash", "/top10", "/css/**", "/js/**").permitAll()
+                        .requestMatchers("/", "/login", "/register", "/generate-hash", "/top10", "/css/**", "/js/**", "/images/**").permitAll()
+                        .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
+                        .requestMatchers("/api/**").permitAll()
+                        .requestMatchers("/error/**").permitAll()
                         // Enkel admin
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         // Ingelogde users
                         .requestMatchers("/team/**", "/prognose/**").hasAnyRole("USER", "ADMIN")
-                        .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
-                        .requestMatchers("/api/**").permitAll()
-                        .requestMatchers("/error/**").permitAll()
                         // Alles andere: ingelogd
-                        .anyRequest().authenticated()
+                        .anyRequest().permitAll()
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
