@@ -49,7 +49,7 @@
                             <span th:text="${match.countryB}">COL</span>
                         </div>
                         <div class="admin-match-row__meta">
-                            <span th:text="${#temporals.format(match.matchDateTime, 'dd/MM/yyyy HH:mm')}"></span>
+                            <span th:text="${#temporals.format(match.matchDateTime, #messages.msg('date.format'))}"></span>
                             <span th:if="${match.stadium != null}">
                 · <span th:text="${match.stadium}"></span>
               </span>

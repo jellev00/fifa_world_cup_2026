@@ -25,7 +25,7 @@
                     <span th:text="${match.countryB}">Colombia</span>
                 </div>
                 <div class="match-detail__meta">
-                    <span>📅 <span th:text="${#temporals.format(match.matchDateTime, 'dd/MM/yyyy HH:mm')}"></span></span>
+                    <span>📅 <span th:text="${#temporals.format(match.matchDateTime, #messages.msg('date.format'))}"></span></span>
                     <span>📍 <span th:text="${(match.city != null ? match.city : '') + (match.stadium != null ? ', ' + match.stadium : '')}"></span></span>
                     <span th:if="${stadiumCapacity != null}" class="capacity-badge">
             🏟️ <span th:text="${#numbers.formatInteger(stadiumCapacity, 1, 'COMMA')} + ' ' + #{match.places}"></span>

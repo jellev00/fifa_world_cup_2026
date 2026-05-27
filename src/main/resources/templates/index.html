@@ -45,9 +45,9 @@
             METLIFE STADIUM
           </span>
                     <span class="match-card-v2__time">
-            <span th:text="${#temporals.format(match.matchDateTime, 'dd MMM')}">14 jun</span>
+            <span th:text="${#temporals.format(match.matchDateTime, #messages.msg('date.short.format'))}">14 jun</span>
             ·
-            <span th:text="${#temporals.format(match.matchDateTime, 'HH:mm')}">13:00</span>
+            <span th:text="${#temporals.format(match.matchDateTime, #messages.msg('time.format'))}">13:00</span>
         </span>
                 </div>
 

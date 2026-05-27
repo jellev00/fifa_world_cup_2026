@@ -26,7 +26,7 @@
                 <!-- Match info -->
                 <div>
                     <div class="prognose-row__match"
-                         th:text="${#temporals.format(match.matchDateTime, 'dd/MM/yyyy HH:mm')}">
+                         th:text="${#temporals.format(match.matchDateTime, #messages.msg('date.format'))}">
                     </div>
                     <div class="prognose-row__teams">
                         <span th:text="${match.countryA}">BEL</span>
